@@ -6,7 +6,7 @@ class Program {
     static string fileName = "../../../test.json";
 
     public static void Main(string[] args) {
-        TryParse();
+        PrintParserResult();
         return;
     }
 
@@ -22,14 +22,11 @@ class Program {
         Console.WriteLine("Reached EOF and finished Lexing!");
     }
 
-    public static void TryParse() {
+    public static void PrintParserResult() {
         Lexer l = new(fileName);
         Parser p = new(l);
         JSONObject val = (JSONObject) p.parse();
         Console.WriteLine("Parsed with no errors!");
-
-        string key = "first_name";
-        JSONValue t = val[key];
-        Console.WriteLine($"val[{key}] = {t}");
+        Console.WriteLine($"{val}");
     }
 }
