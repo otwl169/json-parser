@@ -1,15 +1,37 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using LexerNS;
+using ParserNS;
+using JSONNS;
 
+class Program {
+    static string fileName = "../../../test.json";
 
-string fileName = "../../../test.json";
-Lexer l = new Lexer(fileName);
-Console.WriteLine($"Lexing {fileName}");
-Token cur;
+    public static void Main(string[] args) {
+        TryParse();
+        return;
+    }
 
-while ((cur = l.GetTok()).Type != TokenType.EOF) {
-    Console.WriteLine(cur);
+    private static void PrintLexerResult() {
+        Lexer l = new(fileName);
+        Console.WriteLine($"Lexing {fileName}");
+        Token cur;
+
+        while ((cur = l.GetTok()).Type != TokenType.EOF) {
+            Console.WriteLine(cur);
+        }
+
+        Console.WriteLine("Reached EOF and finished Lexing!");
+    }
+
+    public static void TryParse() {
+        Lexer l = new(fileName);
+        Parser p = new(l);
+        JSONObject val = (JSONObject) p.parse();
+        Console.WriteLine("Parsed with no errors!");
+
+        string key = "address";
+        JSONValue t = val[key];
+        Console.WriteLine($"val[{key}] = {t}");
+    }
 }
-
-Console.WriteLine("Reached EOF and finished Lexing");

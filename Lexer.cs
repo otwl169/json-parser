@@ -10,8 +10,7 @@ enum TokenType {
 
     NUM, // number
     STR, // "string"
-    TRUE, // true
-    FALSE, // false
+    BOOL, // true | false
     NULL, // null
 
     EOF, // end of file
@@ -24,8 +23,8 @@ struct Token {
     public string Lexeme { get; private set; }
 
     public Token(TokenType type, string lexeme)  { 
-        this.Type = type; 
-        this.Lexeme  = lexeme; 
+        Type = type; 
+        Lexeme  = lexeme; 
     }
 
     public override string ToString() {
@@ -58,7 +57,7 @@ class Lexer {
             ']'  => new Token(TokenType.RARR, "]"),
             ':'  => new Token(TokenType.SC, ":"),
             ','  => new Token(TokenType.COMMA, ","),
-            '"'  => ReadStr(),
+            '"'  => ReadString(),
             't'  => ReadTrue(),
             'f'  => ReadFalse(),
             'n'  => ReadNull(),
@@ -67,7 +66,7 @@ class Lexer {
         };
     }
 
-    private Token ReadStr() {
+    private Token ReadString() {
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         while (sr.Peek() >= 0) {
             char c = (char) sr.Read();
@@ -113,7 +112,7 @@ class Lexer {
         }
 
         if (new string(next) == "rue") {
-            return new Token(TokenType.TRUE, "true");
+            return new Token(TokenType.BOOL, "true");
         }
 
         throw new FormatException("Error in Lexer.ReadTrue: couldnt match bool\n");
@@ -126,7 +125,7 @@ class Lexer {
         }
 
         if (new string(next) == "alse") {
-            return new Token(TokenType.FALSE, "false");
+            return new Token(TokenType.BOOL, "false");
         }
 
         throw new FormatException("Error in Lexer.ReadFalse: couldnt match bool\n");
