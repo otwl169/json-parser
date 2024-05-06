@@ -1,6 +1,6 @@
 namespace JSONNS;
 
-class JSONValue;
+abstract class JSONValue;
 
 class JSONNum(int val) : JSONValue {
     public int Val { get; set; } = val;
