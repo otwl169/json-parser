@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace JSON;
+namespace JSON.Types;
 
 abstract class JSONValue {
     public abstract JSONValue this[string s] { get; }
