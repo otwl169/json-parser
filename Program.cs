@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using LexerNS;
+﻿using LexerNS;
 using ParserNS;
 using JSONNS;
 
