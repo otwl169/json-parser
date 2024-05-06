@@ -9,7 +9,7 @@ class JSONNum(int val) : JSONValue {
 
 class JSONString(string val) : JSONValue {
     public string Val { get; set; } = val;
-    public override string ToString() { return Val; }
+    public override string ToString() { return $"{Val}"; }
 }
 
 class JSONBool(bool val) : JSONValue {

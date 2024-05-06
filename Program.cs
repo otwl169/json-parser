@@ -28,7 +28,7 @@ class Program {
         JSONObject val = (JSONObject) p.parse();
         Console.WriteLine("Parsed with no errors!");
 
-        string key = "address";
+        string key = "first_name";
         JSONValue t = val[key];
         Console.WriteLine($"val[{key}] = {t}");
     }
