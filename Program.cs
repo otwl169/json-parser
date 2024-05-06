@@ -1,6 +1,6 @@
 ﻿using LexerNS;
 using ParserNS;
-using JSONNS;
+using JSON;
 
 class Program {
     static string fileName = "../../../test.json";

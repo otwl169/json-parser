@@ -1,5 +1,5 @@
 using LexerNS;
-using JSONNS;
+using JSON;
 using System.Security.Cryptography;
 
 namespace ParserNS;
