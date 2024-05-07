@@ -1,19 +1,24 @@
-using LexerNS;
+using JSON.Tokeniser;
 using JSON.Types;
 
-namespace ParserNS;
+namespace JSON.Parser;
 
 class Parser {
     private Lexer L;
     private Token cur;
+
+    public Parser(string s) {
+        L = new(s);
+        cur = L.GetTok();
+    }
 
     public Parser(Lexer l) {
         L  = l;
         cur = L.GetTok();
     }
 
-    public JSONValue parse() {
-        JSONValue parsed = parseValue();
+    public JSONValue Parse() {
+        JSONValue parsed = ParseValue();
 
         if (cur.Type != TokenType.EOF) {
             throw new FormatException($"Error in Parser.parse(), finished parsing before reaching EOF");
@@ -22,28 +27,28 @@ class Parser {
         return parsed;
     }
 
-    private Token eatTok() {
+    private Token EatTok() {
         // return the token that you ate, progress lexer by 1
         Token eaten = cur;
         cur = L.GetTok();
         return eaten;
     }
 
-    private JSONValue parseValue() {
+    private JSONValue ParseValue() {
         Token start = cur;
         return start.Type switch {
-            TokenType.NULL => parseNull(),
-            TokenType.NUM  => parseNum(),
-            TokenType.STR  => parseString(),
-            TokenType.BOOL => parseBool(),
-            TokenType.LARR => parseArray(),
-            TokenType.LBRA => parseObject(),
+            TokenType.NULL => ParseNull(),
+            TokenType.NUM  => ParseNum(),
+            TokenType.STR  => ParseString(),
+            TokenType.BOOL => ParseBool(),
+            TokenType.LARR => ParseArray(),
+            TokenType.LBRA => ParseObject(),
             _ => throw new FormatException($"Error in Parser.parse(), JSON begins with unexpected character {start.Lexeme}"),
         };
     }
 
-    private JSONNull parseNull() {
-        Token next = eatTok();
+    private JSONNull ParseNull() {
+        Token next = EatTok();
         if (next.Type != TokenType.NULL) {
             throw new FormatException($"Error in Parser.parseNull(), expected NULL, received {next.Type}"); 
         }
@@ -51,8 +56,8 @@ class Parser {
         return new JSONNull();
     }
 
-    private JSONNum parseNum() {
-        Token next = eatTok();
+    private JSONNum ParseNum() {
+        Token next = EatTok();
         if (next.Type != TokenType.NUM) {
             throw new FormatException($"Error in Parser.parseNum(), expected NUM, received {next.Type}"); 
         }
@@ -65,8 +70,8 @@ class Parser {
         throw new FormatException($"Error in Parser.parseNum(), couldnt parse lexeme '{next.Lexeme}'");
     }
 
-    private JSONString parseString() {
-        Token next = eatTok();
+    private JSONString ParseString() {
+        Token next = EatTok();
 
         if (next.Type != TokenType.STR) {
             throw new FormatException($"Error in Parser.parseStr(), expected STR, received {next.Type}"); 
@@ -75,8 +80,8 @@ class Parser {
         return new JSONString(next.Lexeme);
     }
 
-    private JSONBool parseBool() {
-        Token next = eatTok();
+    private JSONBool ParseBool() {
+        Token next = EatTok();
 
         if (next.Type != TokenType.BOOL) {
             throw new FormatException($"Error in Parser.parseBool(), expected BOOL, received {next.Type}"); 
@@ -89,8 +94,8 @@ class Parser {
         };
     }
 
-    private JSONArray parseArray() {
-        Token prev = eatTok();
+    private JSONArray ParseArray() {
+        Token prev = EatTok();
         List<JSONValue> array = [];
 
         if (prev.Type != TokenType.LARR) {
@@ -98,22 +103,22 @@ class Parser {
         }
 
         while (cur.Type != TokenType.RARR) {
-            array.Add(parseValue());
+            array.Add(ParseValue());
 
             if (cur.Type == TokenType.COMMA) {
-                eatTok(); // eat ,
+                EatTok(); // eat ,
             }
             else if (!(cur.Type == TokenType.RARR || cur.Type == TokenType.STR)) {
                 throw new FormatException($"Error in Parser.parseArray(), expected RARR or STR, received {cur.Type}");
             }
         }
 
-        eatTok(); // eat ]
+        EatTok(); // eat ]
         return new JSONArray(array);
     }
 
-    private JSONObject parseObject() {
-        Token prev = eatTok();
+    private JSONObject ParseObject() {
+        Token prev = EatTok();
         Dictionary<string, JSONValue> obj = [];
         JSONString key;
         JSONValue value;
@@ -123,25 +128,25 @@ class Parser {
         }
 
         do {
-            key = parseString();
+            key = ParseString();
 
-            if ((prev = eatTok()).Type != TokenType.SC) {
+            if ((prev = EatTok()).Type != TokenType.SC) {
                 throw new FormatException($"Error in Parser.parseObject(), expected SC, received {prev.Type}");
             }
             
-            value = parseValue();
+            value = ParseValue();
 
             obj.Add(key.Val, value);
 
             if (cur.Type == TokenType.COMMA) {
-                eatTok(); // eat ,
+                EatTok(); // eat ,
             }
             else if (!(cur.Type == TokenType.RBRA || cur.Type == TokenType.STR)) {
                 throw new FormatException($"Error in Parser.parseObject(), expected RBRA or STR, received {cur.Type}");
             }
         } while (cur.Type != TokenType.RBRA);
 
-        eatTok(); // eat }
+        EatTok(); // eat }
         return new JSONObject(obj);
     }
 }

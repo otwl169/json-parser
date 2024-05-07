@@ -1,4 +1,4 @@
-namespace LexerNS;
+namespace JSON.Tokeniser;
 
 enum TokenType {
     LBRA, // {

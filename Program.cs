@@ -1,12 +1,13 @@
-﻿using LexerNS;
-using ParserNS;
-using JSON.Types;
+﻿using JSON.Types;
+using JSON.Parser;
+using JSON.Display;
+using JSON.Tokeniser;
 
 class Program {
     static string fileName = "../../../test.json";
 
     public static void Main(string[] args) {
-        PrintParserResult();
+        PrettyPrintParserResult();
         return;
     }
 
@@ -22,11 +23,10 @@ class Program {
         Console.WriteLine("Reached EOF and finished Lexing!");
     }
 
-    public static void PrintParserResult() {
-        Lexer l = new(fileName);
-        Parser p = new(l);
-        JSONObject val = (JSONObject) p.parse();
+    public static void PrettyPrintParserResult() {
+        Parser p = new(fileName);
+        JSONValue val = p.Parse();
         Console.WriteLine("Parsed with no errors!");
-        Console.WriteLine($"{val}");
+        PrettyPrinter.PrintValue(val);
     }
 }
