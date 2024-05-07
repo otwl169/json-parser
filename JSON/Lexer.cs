@@ -1,6 +1,7 @@
 namespace JSON.Tokeniser;
 
-enum TokenType {
+enum TokenType
+{
     LBRA, // {
     RBRA, // }
     LARR, // [
@@ -14,11 +15,10 @@ enum TokenType {
     NULL, // null
 
     EOF, // end of file
-
-    
 }
 
-struct Token {
+struct Token
+{
     public TokenType Type { get; private set; }
     public string Lexeme { get; private set; }
 
@@ -32,14 +32,17 @@ struct Token {
     }
 }
 
-class Lexer {
+class Lexer
+{
     private StreamReader sr;
 
-    public Lexer(string fileName) {
-        this.sr = new StreamReader(fileName);
+    public Lexer(string fileName)
+    {
+        sr = new(fileName);
     }
 
-    public Token GetTok() {
+    public Token GetTok()
+    {
         if (sr.Peek() < 0) {
             return new Token(TokenType.EOF, "");
         }
@@ -66,7 +69,8 @@ class Lexer {
         };
     }
 
-    private Token ReadString() {
+    private Token ReadString()
+    {
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         while (sr.Peek() >= 0) {
             char c = (char) sr.Read();
@@ -81,7 +85,8 @@ class Lexer {
         throw new FormatException("Error in Lexer.ReadStr: reached EOF before string was closed\n");
     }
 
-    private Token ReadNum(char start) {
+    private Token ReadNum(char start)
+    {
         if (!Char.IsDigit(start)) {
             throw new FormatException("Error in Lexer.ReadNum: invalid number start");
         }
@@ -105,7 +110,8 @@ class Lexer {
         throw new FormatException("Error in Lexer.ReadNum: reached EOF before num ended\n");
     }
 
-    private Token ReadTrue() {
+    private Token ReadTrue()
+    {
         char[] next = new char[3];
         if (sr.Read(next, 0, 3) != 3) {
             throw new FormatException("Error in Lexer.ReadTrue: reached EOF while attempting to read bool\n");
@@ -118,7 +124,8 @@ class Lexer {
         throw new FormatException("Error in Lexer.ReadTrue: couldnt match bool\n");
     }
 
-    private Token ReadFalse() {
+    private Token ReadFalse()
+    {
         char[] next = new char[4];
         if (sr.Read(next, 0, 4) != 4) {
             throw new FormatException("Error in Lexer.ReadFalse: reached EOF while attempting to read bool\n");
@@ -131,7 +138,8 @@ class Lexer {
         throw new FormatException("Error in Lexer.ReadFalse: couldnt match bool\n");
     }
 
-    private Token ReadNull() {
+    private Token ReadNull()
+    {
         char[] next = new char[3];
         if (sr.Read(next, 0, 3) != 3) {
             throw new FormatException("Error in Lexer.ReadNull: reached EOF while attempting to read null\n");

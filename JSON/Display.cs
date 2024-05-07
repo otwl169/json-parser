@@ -2,12 +2,15 @@ using JSON.Types;
 
 namespace JSON.Display;
 
-class PrettyPrinter() {
-    public static void PrintValue(IJSONValue v) {
+class PrettyPrinter()
+{
+    public static void PrintValue(IJSONValue v)
+    {
         PrintValue("", v);
     }
 
-    public static void PrintValue(string prefix, IJSONValue v) {
+    public static void PrintValue(string prefix, IJSONValue v)
+    {
         if (v.GetType() == typeof(JSONNum)) {
             PrintValue(prefix, (JSONNum) v);
         }
@@ -28,21 +31,26 @@ class PrettyPrinter() {
         }
     }
 
-    public static void PrintValue(string _, JSONNum v) { 
+    public static void PrintValue(string _, JSONNum v)
+    { 
         Console.Write($"{v.Val}"); 
     }
 
-    public static void PrintValue(string _, JSONString v) { 
+    public static void PrintValue(string _, JSONString v)
+    { 
         Console.Write($"'{v.Val}'"); 
     }
-    public static void PrintValue(string _, JSONBool v) { 
+    public static void PrintValue(string _, JSONBool v)
+    { 
         Console.Write($"{v.Val}"); 
     }
-    public static void PrintValue(string _, JSONNull v) { 
+    public static void PrintValue(string _, JSONNull v)
+    { 
         Console.Write($"null"); 
     }
 
-    public static void PrintValue(string prefix, JSONArray v) { 
+    public static void PrintValue(string prefix, JSONArray v)
+    { 
         Console.Write("[");
         foreach (var o in v.Val) {
             Console.Write($"\n{prefix}   ");
@@ -51,7 +59,8 @@ class PrettyPrinter() {
         Console.Write($"\n{prefix}]");
     }
 
-    public static void PrintValue(string prefix, JSONObject v) { 
+    public static void PrintValue(string prefix, JSONObject v)
+    { 
         Console.Write("{");
         foreach (var (key, o) in v.Val) {
             Console.Write($"\n{prefix}  {key} : ");
