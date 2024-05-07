@@ -1,6 +1,6 @@
 namespace JSON.Tokeniser;
 
-enum TokenType
+public enum TokenType
 {
     LBRA, // {
     RBRA, // }
@@ -17,7 +17,7 @@ enum TokenType
     EOF, // end of file
 }
 
-struct Token
+public struct Token
 {
     public TokenType Type { get; private set; }
     public string Lexeme { get; private set; }
@@ -32,13 +32,18 @@ struct Token
     }
 }
 
-class Lexer
+public class Lexer
 {
     private StreamReader sr;
 
     public Lexer(string fileName)
     {
         sr = new(fileName);
+    }
+
+    public Lexer(StreamReader stream)
+    {
+        sr = stream;
     }
 
     public Token GetTok()
@@ -107,7 +112,7 @@ class Lexer
             }
         }
 
-        throw new FormatException("Error in Lexer.ReadNum: reached EOF before num ended\n");
+        return new Token(TokenType.NUM, sb.ToString());
     }
 
     private Token ReadTrue()

@@ -3,7 +3,7 @@ using JSON.Types;
 
 namespace JSON.Parser;
 
-class Parser
+public class Parser
 {
     private Lexer L;
     private Token cur;
@@ -18,6 +18,12 @@ class Parser
     {
         L  = l;
         cur = L.GetTok();
+    }
+
+    public IJSONValue Parse(string s)
+    {
+        L = new(new StreamReader(s));
+        return Parse();
     }
 
     public IJSONValue Parse()
