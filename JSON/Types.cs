@@ -2,66 +2,43 @@ using System.Text;
 
 namespace JSON.Types;
 
-abstract class JSONValue {
-    public abstract JSONValue this[string s] { get; }
-    public abstract JSONValue this[int i] { get; }
+interface IJSONValue {
+    public IJSONValue this[string s] { get; }
+    public IJSONValue this[int i] { get; }
 }
 
-class JSONNum(int val) : JSONValue {
+class JSONNum(int val) : IJSONValue {
     public int Val { get; set; } = val;
-    public override JSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONNum"); }
-    public override JSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONNum"); }
-    public override string ToString() { return $"{Val}"; }
+    public IJSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONNum"); }
+    public IJSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONNum"); }
 }
 
-class JSONString(string val) : JSONValue {
+class JSONString(string val) : IJSONValue {
     public string Val { get; set; } = val;
-    public override JSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONString"); }
-    public override JSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONString"); }
-    public override string ToString() { return $"'{Val}'"; }
+    public IJSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONString"); }
+    public IJSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONString"); }
 }
 
-class JSONBool(bool val) : JSONValue {
+class JSONBool(bool val) : IJSONValue {
     public bool Val { get; set; } = val;
-    public override JSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONBool"); }
-    public override JSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONBool"); }
-    public override string ToString() { return $"{Val}"; }
+    public IJSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONBool"); }
+    public IJSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONBool"); }
 }
 
-class JSONNull : JSONValue {
+class JSONNull : IJSONValue {
     public static int? Val = null;
-    public override JSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONNull"); }
-    public override JSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONNull"); }
-    public override string ToString() { return  $"null"; }
+    public IJSONValue this[string s] { get => throw new IndexOutOfRangeException("Cannot index type JSONNull"); }
+    public IJSONValue this[int i] { get => throw new IndexOutOfRangeException("Cannot index type JSONNull"); }
 }
 
-class JSONArray(List<JSONValue> val) : JSONValue {
-    public List<JSONValue> Val { get; set; } = val;
-    public override JSONValue this[string s] { get => throw new IndexOutOfRangeException("Type JSONArray cannot be indexed via string"); }
-    public override JSONValue this[int i] { get => Val[i]; }
-
-    public override string ToString() {
-        StringBuilder sb = new();
-        sb.Append('[');
-        sb.Append(String.Join(", ", Val));
-        sb.Append(']');
-        return sb.ToString(); 
-    }
+class JSONArray(List<IJSONValue> val) : IJSONValue {
+    public List<IJSONValue> Val { get; set; } = val;
+    public IJSONValue this[string s] { get => throw new IndexOutOfRangeException("Type JSONArray cannot be indexed via string"); }
+    public IJSONValue this[int i] { get => Val[i]; }
 }
 
-class JSONObject(Dictionary<string, JSONValue> val) : JSONValue {
-    public Dictionary<string, JSONValue> Val { get; set; } = val;
-    public override JSONValue this[string s] { get => Val[s]; }
-    public override JSONValue this[int i] { get => throw new IndexOutOfRangeException("Type JSONArray cannot be indexed via int"); }
-
-    public override string ToString() {
-        StringBuilder sb = new();
-        sb.Append("{");
-        foreach (var (k, v) in Val) {
-            sb.Append($"{k} : {v},");
-        }
-        sb.Length--; // get rid of trailing ,
-        sb.Append('}');
-        return sb.ToString(); 
-    }
+class JSONObject(Dictionary<string, IJSONValue> val) : IJSONValue {
+    public Dictionary<string, IJSONValue> Val { get; set; } = val;
+    public IJSONValue this[string s] { get => Val[s]; }
+    public IJSONValue this[int i] { get => throw new IndexOutOfRangeException("Type JSONArray cannot be indexed via int"); }
 }

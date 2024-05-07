@@ -3,11 +3,11 @@ using JSON.Types;
 namespace JSON.Display;
 
 class PrettyPrinter() {
-    public static void PrintValue(JSONValue v) {
+    public static void PrintValue(IJSONValue v) {
         PrintValue("", v);
     }
 
-    public static void PrintValue(string prefix, JSONValue v) {
+    public static void PrintValue(string prefix, IJSONValue v) {
         if (v.GetType() == typeof(JSONNum)) {
             PrintValue(prefix, (JSONNum) v);
         }

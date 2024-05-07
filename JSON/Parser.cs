@@ -17,8 +17,8 @@ class Parser {
         cur = L.GetTok();
     }
 
-    public JSONValue Parse() {
-        JSONValue parsed = ParseValue();
+    public IJSONValue Parse() {
+        IJSONValue parsed = ParseValue();
 
         if (cur.Type != TokenType.EOF) {
             throw new FormatException($"Error in Parser.parse(), finished parsing before reaching EOF");
@@ -34,7 +34,7 @@ class Parser {
         return eaten;
     }
 
-    private JSONValue ParseValue() {
+    private IJSONValue ParseValue() {
         Token start = cur;
         return start.Type switch {
             TokenType.NULL => ParseNull(),
@@ -96,7 +96,7 @@ class Parser {
 
     private JSONArray ParseArray() {
         Token prev = EatTok();
-        List<JSONValue> array = [];
+        List<IJSONValue> array = [];
 
         if (prev.Type != TokenType.LARR) {
             throw new FormatException($"Error in Parser.parseArray(), expected LARR, received {prev.Type}");
@@ -119,9 +119,9 @@ class Parser {
 
     private JSONObject ParseObject() {
         Token prev = EatTok();
-        Dictionary<string, JSONValue> obj = [];
+        Dictionary<string, IJSONValue> obj = [];
         JSONString key;
-        JSONValue value;
+        IJSONValue value;
 
         if (prev.Type != TokenType.LBRA) {
             throw new FormatException($"Error in Parser.parseObject(), expected LBRA, received {prev.Type}");

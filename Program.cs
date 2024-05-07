@@ -25,7 +25,7 @@ class Program {
 
     public static void PrettyPrintParserResult() {
         Parser p = new(fileName);
-        JSONValue val = p.Parse();
+        IJSONValue val = p.Parse();
         Console.WriteLine("Parsed with no errors!");
         PrettyPrinter.PrintValue(val);
     }
