@@ -1,4 +1,5 @@
 using JSON.Types;
+using System.Reflection.Metadata.Ecma335;
 
 namespace JSON.Display;
 
@@ -11,24 +12,20 @@ class PrettyPrinter()
 
     public static void PrintValue(string prefix, IJSONValue v)
     {
-        if (v.GetType() == typeof(JSONNum)) {
-            PrintValue(prefix, (JSONNum) v);
-        }
-        else if (v.GetType() == typeof(JSONString)) {
-            PrintValue(prefix, (JSONString) v);
-        }
-        else if (v.GetType() == typeof(JSONBool)) {
-            PrintValue(prefix, (JSONBool) v);
-        }
-        else if (v.GetType() == typeof(JSONNull)) {
-            PrintValue(prefix, (JSONNull) v);
-        }
-        else if (v.GetType() == typeof(JSONArray)) {
-            PrintValue(prefix, (JSONArray) v);
-        }
-        else if (v.GetType() == typeof(JSONObject)) {
-            PrintValue(prefix, (JSONObject) v);
-        }
+        switch (v)
+        {
+            case JSONNum val:    PrintValue(prefix, val); break;
+            case JSONString val: PrintValue(prefix, val); break;
+            case JSONBool val:   PrintValue(prefix, val); break;
+            case JSONNull val:   PrintValue(prefix, val); break;
+            case JSONArray val:  PrintValue(prefix, val); break;
+            case JSONObject val: PrintValue(prefix, val); break;
+        };
+    }
+
+    private static void PrintNotImplementedJSONValue()
+    {
+        throw new FormatException("This type of JSONValue doesn#t have an implementation for PrettyPrinter");
     }
 
     public static void PrintValue(string _, JSONNum v)
